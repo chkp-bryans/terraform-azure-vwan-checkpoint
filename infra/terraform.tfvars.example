@@ -1,0 +1,32 @@
+# Copy to terraform.tfvars (gitignored) and fill in real values before terraform apply.
+#
+# Auth is Azure CLI (az login). You only need subscription_id from:
+#   az account show --query id -o tsv
+
+subscription_id = "00000000-0000-0000-0000-000000000000"
+
+location                  = "eastus"
+vwan_resource_group_name  = "rg-vwan-east"
+vwan_name                 = "vwan-east"
+hub_name                  = "vhub-eastus"
+hub_address_prefix        = "10.0.0.0/23"
+
+checkpoint_managed_app_rg_name = "rg-checkpoint-managed-app"
+nva_rg_name                    = "rg-checkpoint-nva"
+managed_app_name               = "cp-vwan-managed-app-nva"
+nva_name                       = "cp-vwan-nva"
+
+# Full Package includes Smart-1 Cloud. Alternatives:
+#   "Security Enforcement (NGTP)"
+#   "Full Package Premium (NGTX and Smart-1 Cloud Premium)"
+license_type = "Full Package (NGTX and Smart-1 Cloud)"
+
+# 8-30 alphanumeric characters. Required even when using Smart-1 Cloud.
+sic_key = "ChangeMeSicKey1"
+
+# ssh-rsa / ssh-ed25519 public key for gateway admin SSH.
+admin_ssh_public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC... replace-me"
+
+# Scale unit 10 deploys two NVA instances. Create tokens in Smart-1 Cloud (SK180501).
+smart1_cloud_token_a = "replace-with-smart1-token-instance-a"
+smart1_cloud_token_b = "replace-with-smart1-token-instance-b"
