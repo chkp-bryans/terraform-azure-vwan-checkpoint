@@ -16,10 +16,11 @@ module "checkpoint_nva" {
     all = var.tags
   }
 
-  # Existing hub created in vwan.tf — do not let the module create another WAN/hub.
-  vwan_hub_name           = azurerm_virtual_hub.east.name
-  vwan_hub_resource_group = azurerm_resource_group.vwan.name
-  vwan_hub_address_prefix = ""
+  # Non-empty hub CIDR selects new-VWAN mode: the module creates Virtual WAN + hub
+  # in this resource group (no plan-time data.azurerm_virtual_hub lookup).
+  vwan_name               = var.vwan_name
+  vwan_hub_name           = var.hub_name
+  vwan_hub_address_prefix = var.hub_address_prefix
 
   managed_app_name = var.managed_app_name
   nva_rg_name      = var.nva_rg_name
@@ -38,5 +39,5 @@ module "checkpoint_nva" {
   routing_intent_internet_traffic = "yes"
   routing_intent_private_traffic  = "yes"
 
-  depends_on = [azurerm_virtual_hub.east]
+  # Do not set depends_on, count, or for_each: the Check Point module configures its own providers.
 }

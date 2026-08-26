@@ -1,21 +1,21 @@
 output "vwan_resource_group_name" {
-  description = "Resource group that owns the Virtual WAN and East US hub."
-  value       = azurerm_resource_group.vwan.name
-}
-
-output "vwan_id" {
-  description = "Resource ID of the Standard Virtual WAN."
-  value       = azurerm_virtual_wan.this.id
+  description = "Managed-app resource group that owns the Virtual WAN, East US hub, and Check Point managed application."
+  value       = module.checkpoint_nva.resource_group_name
 }
 
 output "virtual_hub_id" {
-  description = "Resource ID of the East US virtual hub."
-  value       = azurerm_virtual_hub.east.id
+  description = "Resource ID of the East US virtual hub created by the Check Point NVA module."
+  value       = module.checkpoint_nva.vwan_hub_id
 }
 
-output "virtual_hub_default_route_table_id" {
-  description = "Default route table of the East US virtual hub."
-  value       = azurerm_virtual_hub.east.default_route_table_id
+output "virtual_hub_virtual_router_asn" {
+  description = "ASN of the East US virtual hub's built-in router."
+  value       = module.checkpoint_nva.vwan_hub_virtual_router_asn
+}
+
+output "virtual_hub_virtual_router_ips" {
+  description = "IP addresses of the East US virtual hub's built-in router."
+  value       = module.checkpoint_nva.vwan_hub_virtual_router_ips
 }
 
 output "checkpoint_managed_app_id" {
@@ -24,7 +24,7 @@ output "checkpoint_managed_app_id" {
 }
 
 output "checkpoint_nva_resource_group_name" {
-  description = "Resource group created for the Check Point managed application."
+  description = "Resource group created for the Check Point managed application (also contains the WAN and hub)."
   value       = module.checkpoint_nva.resource_group_name
 }
 

@@ -39,26 +39,20 @@ variable "location" {
   default     = "eastus"
 }
 
-variable "vwan_resource_group_name" {
-  description = "Resource group that owns the Virtual WAN and East US hub."
-  type        = string
-  default     = "rg-vwan-east"
-}
-
 variable "vwan_name" {
-  description = "Name of the Standard Virtual WAN."
+  description = "Name of the Virtual WAN created by the Check Point NVA module (Standard type)."
   type        = string
   default     = "vwan-east"
 }
 
 variable "hub_name" {
-  description = "Name of the East US virtual hub."
+  description = "Name of the East US virtual hub created by the Check Point NVA module."
   type        = string
   default     = "vhub-eastus"
 }
 
 variable "hub_address_prefix" {
-  description = "Address prefix for the virtual hub. Azure minimum is /24; /23 leaves room for NVA IPs."
+  description = "Address prefix for the virtual hub. A non-empty CIDR selects Check Point new-VWAN mode so WAN+hub are created in the same apply. Azure minimum is /24; /23 leaves room for NVA IPs. Hub routing capacity defaults to 2 units (3 Gbps)."
   type        = string
   default     = "10.0.0.0/23"
 
@@ -69,7 +63,7 @@ variable "hub_address_prefix" {
 }
 
 variable "checkpoint_managed_app_rg_name" {
-  description = "Resource group created by the Check Point module for the Marketplace managed application."
+  description = "Resource group created by the Check Point module for the Marketplace managed application, Virtual WAN, and East US hub."
   type        = string
   default     = "rg-checkpoint-managed-app"
 }
@@ -139,7 +133,7 @@ variable "smart1_cloud_token_b" {
 }
 
 variable "tags" {
-  description = "Tags applied to the Virtual WAN resource group, WAN, and hub."
+  description = "Tags applied via the Check Point module (managed-app resource group, WAN, hub, and NVA)."
   type        = map(string)
   default = {
     project     = "azure-vwan-checkpoint"

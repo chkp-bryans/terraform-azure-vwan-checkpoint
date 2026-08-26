@@ -5,11 +5,13 @@
 
 subscription_id = "00000000-0000-0000-0000-000000000000"
 
-location                  = "eastus"
-vwan_resource_group_name  = "rg-vwan-east"
-vwan_name                 = "vwan-east"
-hub_name                  = "vhub-eastus"
-hub_address_prefix        = "10.0.0.0/23"
+location           = "eastus"
+vwan_name          = "vwan-east"
+hub_name           = "vhub-eastus"
+hub_address_prefix = "10.0.0.0/23"
+
+# WAN + hub are created by the Check Point NVA module in this resource group.
+# Hub routing capacity defaults to 2 units (smallest, 3 Gbps).
 
 checkpoint_managed_app_rg_name = "rg-checkpoint-managed-app"
 nva_rg_name                    = "rg-checkpoint-nva"

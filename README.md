@@ -1,14 +1,13 @@
 # Azure Virtual WAN + Check Point CloudGuard NVA
 
-Terraform for a Standard Azure Virtual WAN, an East US hub at the smallest routing capacity, and Check Point CloudGuard Network Security NVAs inside that hub.
+Terraform for a Standard Azure Virtual WAN, an East US hub at the smallest routing capacity, and Check Point CloudGuard Network Security NVAs inside that hub. A single `terraform plan` / `apply` creates all three.
 
 ## Architecture
 
-- **`rg-vwan-east`**: Virtual WAN (`Standard`) and East US hub (`sku = Standard`, `virtual_router_auto_scale_min_capacity = 2` — 3 Gbps / 2,000 VMs).
-- **Check Point managed-app RG**: Marketplace managed application from [`CheckPointSW/cloudguard-network-security/azure//modules/nva`](https://registry.terraform.io/modules/CheckPointSW/cloudguard-network-security/azure/latest/submodules/nva).
+- **Check Point managed-app RG** (`rg-checkpoint-managed-app`): Marketplace managed application from [`CheckPointSW/cloudguard-network-security/azure//modules/nva`](https://registry.terraform.io/modules/CheckPointSW/cloudguard-network-security/azure/latest/submodules/nva). In **new-VWAN** mode the same module also creates the Virtual WAN (`Standard`) and East US hub. Hub SKU/capacity are left unset, so `virtual_router_auto_scale_min_capacity` defaults to **2** (3 Gbps / 2,000 VMs).
 - **NVA**: 10 scale units (~8 Gbps NGTP, 2 gateway instances), Gaia **R82**, routing intent for Internet and private traffic.
 
-The Check Point module is used in **existing-hub** mode (`vwan_hub_address_prefix = ""`) so this repo owns hub capacity instead of the module creating a second WAN/hub.
+Pass a non-empty `hub_address_prefix` (default `10.0.0.0/23`) so the module creates WAN + hub instead of looking up an existing hub at plan time.
 
 ## Prerequisites
 
@@ -51,7 +50,7 @@ terraform plan
 terraform apply
 ```
 
-Hub-only create is typically 5–7 minutes. Hub plus the Check Point managed application is often 30+ minutes and incurs NVA infrastructure-unit cost. Do not apply until those costs are acceptable.
+WAN, hub, and the Check Point managed application are created together. Apply is often 30+ minutes and incurs NVA infrastructure-unit cost. Do not apply until those costs are acceptable.
 
 ## Destroy
 
@@ -66,7 +65,6 @@ infra/
   versions.tf
   providers.tf
   variables.tf
-  vwan.tf
   checkpoint.tf
   outputs.tf
   terraform.tfvars.example
